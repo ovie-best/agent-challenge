@@ -27,8 +27,11 @@
     "@mastra/libsql": "^0.10.2",
     "@mastra/loggers": "^0.10.2",
     "@mastra/memory": "^0.10.3",
+    "@types/xml2js": "^0.4.14",
     "dotenv": "^16.5.0",
+    "octokit": "^5.0.3",
     "ollama-ai-provider": "^1.2.0",
+    "xml2js": "^0.6.2",
     "zod": "^3.25.67"
   },
   "devDependencies": {
