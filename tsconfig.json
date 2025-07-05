@@ -10,7 +10,6 @@
     "noEmit": true,
     "outDir": "dist"
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"],
+  "typeRoots": ["./node_modules/@types", "./types", "@types/npmcli__arborist"]
 }

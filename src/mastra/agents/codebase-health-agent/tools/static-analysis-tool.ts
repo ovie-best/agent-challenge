@@ -3,7 +3,7 @@ import { z } from "zod";
 import { Octokit } from "octokit";
 
 export const staticAnalysisTool = createTool({
-  id: "github-static-analysis",
+  id: "static-analysis-tool",
   description:
     "Performs static analysis on GitHub repositories by examining file structures and code patterns",
   inputSchema: z.object({
@@ -15,9 +15,9 @@ export const staticAnalysisTool = createTool({
     depth: z
       .number()
       .min(1)
-      .max(3)
+      .max(5)
       .default(1)
-      .describe("Depth of directory traversal (1-3)"),
+      .describe("Depth of directory traversal (1-5)"),
     fileExtensions: z
       .array(z.string())
       .default(["js", "ts", "jsx", "tsx", "py", "java", "go"])

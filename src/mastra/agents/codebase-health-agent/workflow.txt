@@ -1,0 +1,188 @@
+import { Agent } from "@mastra/core/agent";
+import { createStep, createWorkflow } from "@mastra/core/workflows";
+import { z } from "zod";
+import { Octokit } from "octokit";
+import { model } from "../../../config";
+
+/* ---------- 1. SHARED SCHEMAS ---------- */
+
+const repoAnalysisSchema = z.object({
+  repoUrl: z.string().url(),
+  lastCommitDays: z.number(),
+  testCoverage: z.number(),
+  openIssues: z.number(),
+  hasReadme: z.boolean(),
+  hasLicense: z.boolean(),
+  dependencyCount: z.number(),
+});
+
+/* ---------- 2. LLM AGENT ---------- */
+
+const agent = new Agent({
+  name: "Codebase Analysis Agent",
+  model,
+  instructions: `…same prompt text as before…`,
+});
+
+/* ---------- 3. WORKFLOW STEPS ---------- */
+
+// STEP 1 ─ fetch raw repo metrics
+const fetchRepoData = createStep({
+  id: "fetch-repo-data",
+  description: "Fetches repository metrics from GitHub",
+  inputSchema: z.object({ repoUrl: z.string().url() }),
+  outputSchema: repoAnalysisSchema,
+  execute: async ({ inputData }) => {
+    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+    const [_, owner, repo] =
+      inputData.repoUrl.match(/github\.com\/([^/]+)\/([^/]+)/i) || [];
+
+    // commits ➜ last‑commit age
+    const commits = await octokit.rest.repos.listCommits({
+      owner,
+      repo,
+      per_page: 1,
+    });
+    const lastCommitDate = commits.data[0]?.commit?.author?.date;
+    const lastCommitDays = lastCommitDate
+      ? Math.floor((Date.now() - new Date(lastCommitDate).getTime()) / 8.64e7)
+      : 365;
+
+    // issues
+    const issues = await octokit.rest.issues.listForRepo({
+      owner,
+      repo,
+      state: "open",
+    });
+
+    // README / LICENSE
+    const hasReadme = await checkFileExists(octokit, owner, repo, "README.md");
+    const hasLicense = await checkFileExists(octokit, owner, repo, "LICENSE");
+
+    // very rough test‑coverage proxy
+    const testFiles = await countFiles(octokit, owner, repo, "test/");
+    const testCoverage = testFiles > 0 ? 70 : 0;
+
+    return {
+      repoUrl: inputData.repoUrl,
+      lastCommitDays,
+      testCoverage,
+      openIssues: issues.data.length,
+      hasReadme,
+      hasLicense,
+      dependencyCount: 0,
+    };
+  },
+});
+
+// STEP 2a ─ assess testing  (runs in parallel)
+const assessTesting = createStep({
+  id: "assess-testing",
+  description: "Adjusts or recalculates testing‑related metrics.",
+  inputSchema: repoAnalysisSchema,
+  outputSchema: repoAnalysisSchema,
+  execute: async ({ inputData }) => {
+    const improvedCoverage =
+      inputData.testCoverage === 0 && inputData.openIssues < 5
+        ? 20
+        : inputData.testCoverage; // toy heuristic
+    return { ...inputData, testCoverage: improvedCoverage };
+  },
+});
+
+// STEP 2b ─ assess documentation  (runs in parallel)
+const assessDocumentation = createStep({
+  id: "assess-documentation",
+  description: "Updates documentation flags / scores.",
+  inputSchema: repoAnalysisSchema,
+  outputSchema: repoAnalysisSchema,
+  execute: async ({ inputData }) => {
+    // here we might fetch extra doc statistics; for now just echo
+    return { ...inputData };
+  },
+});
+
+// STEP 3 ─ aggregate the two parallel branches
+const aggregateMetrics = createStep({
+  id: "aggregate-metrics",
+  description: "Merges testing & documentation outputs into one object.",
+  inputSchema: repoAnalysisSchema,
+  outputSchema: repoAnalysisSchema,
+  execute: async ({ inputData }) => {
+    const testing = (inputData as any)["assess-testing"];
+    const docs = (inputData as any)["assess-documentation"];
+    // Start with testing branch (contains base metrics), then layer docs flags
+    return {
+      ...testing,
+      hasReadme: docs.hasReadme,
+      hasLicense: docs.hasLicense,
+    };
+  },
+});
+
+// STEP 4 ─ final LLM report
+const generateAnalysis = createStep({
+  id: "generate-analysis",
+  description: "Generates the human‑readable code‑health report.",
+  inputSchema: repoAnalysisSchema,
+  outputSchema: z.object({ report: z.string() }),
+  execute: async ({ inputData }) => {
+    const prompt = `Analyze the following codebase metrics and generate recommendations:\n${JSON.stringify(
+      inputData,
+      null,
+      2
+    )}`;
+
+    const response = await agent.stream([{ role: "user", content: prompt }]);
+    let reportText = "";
+    for await (const chunk of response.textStream) {
+      process.stdout.write(chunk);
+      reportText += chunk;
+    }
+    return { report: reportText };
+  },
+});
+
+/* ---------- 4. WORKFLOW DEFINITION ---------- */
+
+const codebaseWorkflow = createWorkflow({
+  id: "codebase-analysis",
+  inputSchema: z.object({ repoUrl: z.string().url() }),
+  outputSchema: z.object({ report: z.string() }),
+})
+  .then(fetchRepoData) // 1️⃣
+  .parallel([assessTesting, assessDocumentation]) // 2️⃣ & 3️⃣  (in parallel)
+  .then(aggregateMetrics) // 4️⃣
+  .then(generateAnalysis) // 5️⃣
+  .commit();
+
+/* ---------- 5. HELPER FUNCTIONS ---------- */
+
+async function checkFileExists(
+  octokit: Octokit,
+  owner: string,
+  repo: string,
+  path: string
+) {
+  try {
+    await octokit.rest.repos.getContent({ owner, repo, path });
+    return true;
+  } catch {
+    return false;
+  }
+}
+async function countFiles(
+  octokit: Octokit,
+  owner: string,
+  repo: string,
+  path: string
+) {
+  try {
+    const contents = await octokit.rest.repos.getContent({ owner, repo, path });
+    return Array.isArray(contents.data) ? contents.data.length : 1;
+  } catch {
+    return 0;
+  }
+}
+
+export { codebaseWorkflow };

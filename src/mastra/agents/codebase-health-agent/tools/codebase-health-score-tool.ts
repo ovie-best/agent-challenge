@@ -4,7 +4,7 @@ import { Octokit } from "octokit";
 
 export const codebaseHealthTool = createTool({
   id: "codebase-health",
-  description: "Evaluates overall health of a codebase on a scale of 0-100%",
+  description: "Evaluates overall health of a codebase on a 100% scale",
   inputSchema: z.object({
     repoUrl: z.string().url().describe("GitHub repository URL"),
     branch: z.string().default("main"),
@@ -155,7 +155,7 @@ export const codebaseHealthTool = createTool({
         Object.entries(weights).map(([k, v]) => [k, v / totalWeight])
       );
 
-      const score = Math.round(
+      const rawScore = Math.round(
         100 *
           (metrics.testCoverage * normalizedWeights.testCoverage +
             metrics.activity * normalizedWeights.activity +
@@ -164,6 +164,8 @@ export const codebaseHealthTool = createTool({
             metrics.dependencies * normalizedWeights.dependencies +
             metrics.ci * normalizedWeights.ci)
       );
+
+      const score = 100 - rawScore;
 
       return {
         score,

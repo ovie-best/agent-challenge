@@ -4,4 +4,8 @@ dist
 .mastra
 *.db
 *.db-*
+
+.env.env
+.env.local
+
 .env
