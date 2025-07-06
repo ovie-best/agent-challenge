@@ -1,11 +1,11 @@
 import { Mastra } from "@mastra/core/mastra";
 import { PinoLogger } from "@mastra/loggers";
-import { codeHealthAgent } from "./agents/codebase-health-agent/code-health-agent";
-import { codebaseWorkflow } from "./agents/codebase-health-agent/workflows/codebase-health-workflow";
+import { codebaseAuditAgent } from "./agents/codebase-health-agent/codebase-audit-agent";
+import { codebaseAuditWorkflow } from "./agents/codebase-health-agent/workflows/codebase-audit-workflow";
 
 export const mastra = new Mastra({
-  workflows: { codebaseWorkflow },
-  agents: { codeHealthAgent },
+  workflows: { codebaseAuditWorkflow },
+  agents: { codebaseAuditAgent },
 
   logger: new PinoLogger({
     name: "Mastra",
