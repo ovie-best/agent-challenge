@@ -1,159 +1,396 @@
-# Nosana Builders Challenge: Agent-101
+# CODEBASE AUDIT AI AGENT 🔍 - Nosana Builders Challenge
 
-![Agent-101](./assets/NosanaBuildersChallengeAgents.jpg)
+## Project Overview
 
-## Topic
+### 🔍 Agent Description and Purpose
 
-Nosana Builders Challenge, 2nd edition
-Agent-101: Build your first agent
+The Codebase Audit Agent is an intelligent, automated system designed to analyze remote software repositories on github and generate actionable technical reports on code quality, maintainability, security posture, and team productivity signals.
 
-## Description
+Its primary goal is to reduce manual engineering overhead by surfacing high-impact technical debt and improvement opportunities—quickly, consistently, and with precision.
 
-The main goal of this `Nosana Builders Challenge` to teach participants to build and deploy agents. This first step will be in running a basic AI agent and giving it some basic functionality. Participants will add a tool, for the tool calling capabilities of the agent. These are basically some TypeScript functions, that will, for example, retrieve some data from a weather API, post a tweet via an API call, etc.
+Built with a deep understanding of large-scale systems, secure coding practices, and developer workflows, this agent is capable of running both shallow health checks and deep-dive audits depending on the state of the codebase.
 
-## [Mastra](https://github.com/mastra-ai/mastra)
+The agent simulates the judgment and rigor of a Senior Software Engineer or Engineering Auditor with 10+ years of experience. It delivers:
 
-For this challenge we will be using Mastra to build our tool.
+✓ Codebase Health Reports (with numerical scoring on a 100% scale)
 
-> Mastra is an opinionated TypeScript framework that helps you build AI applications and features quickly. It gives you the set of primitives you need: workflows, agents, RAG, integrations, and evals. You can run Mastra on your local machine, or deploy to a serverless cloud.
+✓ Technology Stack Identification (with confidence metrics)
 
-### Required Reading
+✓ Security & Dependency Audits (including CVEs and outdated packages)
 
-We recommend reading the following sections to get started with how to create an Agent and how to implement Tool Calling.
+✓ Static Code Analysis (complexity, anti-patterns, documentation)
 
-- <https://mastra.ai/en/docs/agents/overview>
-- [Mastra Guide: Build an AI stock agent](https://mastra.ai/en/guides/guide/stock-agent)
+✓ Team Productivity Signals (via git history)
 
-## Get Started
+✓ CI/CD (continous integration and continous deployment) and Test Coverage Diagnostics
 
-To get started run the following command to start developing:
-We recommend using [pnpm](https://pnpm.io/installation), but you can try npm, or bun if you prefer.
+✓ Prioritized Recommendations (P0–P2 triage system)
 
-```sh
+It ensures consistency, reproducibility, and evidence-based insights—useful to developers, team leads, and engineering managers.
+
+### 🛠️ Agent Tools & Capabilities Breakdown
+
+The agent is built with six(6) tools, each tool in the agent's workflow is specialized for a specific stage of analysis:
+
+#### 1. codebaseHealthTool
+
+✓ This tool assigns a Health Score (0–100%) based on general metrics (structure, dependencies, tests).
+
+#### 2. codebaseTypeDetector
+
+✓ Identifies project type (Frontend, Backend, Mobile, AI, Monorepo).
+
+✓ Lists primary languages/frameworks and a confidence score.
+
+✓ Flags deprecated or mixed-stack warnings.
+
+#### 3. gitHistoryTool
+
+✓ Analyzes commit activity over time.
+
+✓ Surfaces bus factor issues (single points of knowledge).
+
+✓ Detects dead code, orphaned branches, and spikes/inactivity.
+
+#### 4. staticAnalysisTool
+
+✓ Calculates cyclomatic complexity and flags unmaintainable functions.
+
+✓ Identifies anti-patterns (e.g., god objects, tight coupling).
+
+✓ Assesses documentation coverage (missing docstrings, outdated README).
+
+#### 5. dependencyAnalysisTool
+
+✓ Checks for outdated packages and vulnerabilities (CVEs).
+
+✓ Highlights redundant or unused dependencies to reduce bloat.
+
+#### 6. testCoverageTool
+
+✓ Reports test coverage levels and gaps.
+
+✓ Detects flaky tests.
+
+✓ Measures CI (continous integration) latency, failure rates, and reliability of build pipelines.
+
+### ⚙️ Agent Workflow
+
+The workflow for the agent is designed to automatically review a software project hosted on GitHub and produce a detailed health report. It mimics what a senior software engineer or auditor would do manually — but faster, and at scale.
+
+![codebase audit agent workflow image]()
+
+#### Below is a step by step process on how it works:
+
+#### 1. Start with the Repo URL
+
+You give it a GitHub repo link (e.g., https://github.com/myorg/myrepo).
+
+#### 2. Initial Health Check
+
+It runs a quick, high-level check to score the project’s overall health out of 100.
+It looks at things like:
+
+✓ Is the repo active?
+
+✓ Are there recent commits?
+
+✓ Are there many open issues?
+
+✓ Is it archived?
+
+This step helps decide how deep the audit needs to go.
+
+#### 3. In-Depth Analysis (Runs in Parallel)
+
+If the repo isn't already in great shape, it performs a series of specialized analyses:
+
+**✓ Codebase Profile:** Determines the repo type (e.g., Frontend, Backend, Monorepo) and what languages/frameworks it uses.
+
+**✓ Git Analysis:** Checks contributor activity, commit patterns, and possible abandoned code.
+
+**✓ Static Analysis:** Looks for complex or messy code, anti-patterns, and missing documentation.
+
+**✓ Dependency Audit:** Flags outdated or risky packages and unused dependencies.
+
+**✓ Test Coverage Review:** Estimates how well the project is tested, and looks for flaky tests or CI problems.
+
+**✓ General Repo Data:** Collects stats like last commit date, open issues, test coverage, and whether it has a README or license.
+
+#### 4. Generate a Human-Readable Report (Final Step)
+
+All the results are sent to the agent (trained to think like a senior software engineer), which:
+
+Writes a clear, prioritized report with findings.
+
+Gives a list of recommendations, each marked as:
+
+✓ P0 (Critical)
+
+✓ P1 (High-value)
+
+✓ P2 (Nice-to-have)
+
+Estimates the effort needed to fix each issue.
+
+Below is an example of the a generated report 👇
+
+<pre>```json{
+  ### Codebase Audit Report
+
+#### Repository Summary:
+The repository at `https://github.com/ovie-best/Cypher-Wave` has a health score of **60%**. This indicates that the codebase needs a full audit to ensure it meets best practices and is maintainable.
+
+#### Key Metrics:
+
+1. **Dependencies:**
+   - Total number of dependencies: 0
+   - Outdated dependencies:
+     - `axios`
+     - `react`
+     - `react-dom`
+
+2. **Test Coverage:**
+   - Current test coverage: 0%
+   - Gap in test coverage: 100%
+
+3. **Active Contributors:**
+   - Total contributors: 2
+   - Contributions by login:
+     - ovie-best (15 commits)
+     - FinisherDev (5 commits)
+
+4. **Frameworks Used:**
+   - Type: Frontend
+   - Languages: JavaScript
+   - Frameworks:
+     - react
+     - react-dom
+     - react-icons
+     - react-multi-carousel
+     - react-router-dom
+     - @types/react
+     - @types/react-dom
+     - vite-plugin-react
+     - eslint-config-react-app
+     - eslint-plugin-react
+     - eslint-plugin-react-hooks
+     - eslint-plugin-react-refresh
+
+#### Git History Analysis:
+
+- **Commit Frequency:** Moderate
+  - Bus Factor: 2 (1 commit per day)
+  - Orphaned Code: `legacy/utils.js`
+
+- **Contributors:**
+  - ovie-best (15 commits, last activity: 3 months ago)
+  - FinisherDev (5 commits, last activity: 4 weeks ago)
+
+#### Static Analysis:
+
+- **Complexity Hotspots:**
+  - Complexity hotspot identified in `src/auth/service.ts`
+
+- **AntiPatterns:**
+  - God object in `UserController` class
+
+- **Documentation Gaps:**
+  - Documentation gap found in `src/utils/helpers.ts`
+
+#### Dependency Analysis:
+
+- **Outdated Packages:**
+  - `axios`
+  - `react`
+  - `react-dom`
+
+- **Vulnerabilities:**
+  - Lodash version `4.17.15` is outdated
+
+- **Redundant Dependencies:**
+  - `left-pad` dependency identified as redundant
+
+#### Test Analysis:
+
+- **Coverage Percentage:** 0%
+- **Flaky Tests:**
+  - Flaky test found in `auth/login.test.ts`
+
+- **Pipeline Issues:**
+  - Slow build step detected
+
+### Recommendations:
+
+1. **Dependencies:**
+   - Update outdated dependencies (`axios`, `react`, `react-dom`) to the latest versions.
+   - Audit and update redundant or outdated packages.
+
+2. **Test Coverage:**
+   - Implement continuous integration for automated tests, ensuring all components are thoroughly tested.
+   - Address flaky tests by fixing them or removing unnecessary tests.
+
+3. **Code Quality:**
+   - Review `src/auth/service.ts` for the God object pattern and refactor it to adhere to best practices.
+   - Ensure that documentation is updated in `src/utils/helpers.ts`.
+
+4. **Git History:**
+   - Monitor commit frequency and bus factor to ensure codebase stability.
+   - Address orphaned files like `legacy/utils.js` by refactoring or removing them.
+
+5. **Static Analysis:**
+   - Review the complexity hotspot identified in `src/auth/service.ts`.
+   - Ensure that all anti-patterns are addressed, such as the God object pattern in `UserController`.
+
+6. **Dependency Analysis:**
+   - Update outdated packages (`axios`, `react`, `react-dom`) to their latest versions.
+   - Address vulnerabilities by updating Lodash version.
+
+7. **Test Analysis:**
+   - Fix flaky tests identified in `auth/login.test.ts`.
+   - Ensure that all components are thoroughly tested and automated CI is implemented for continuous integration.
+
+### Estimated Effort:
+
+   - Update outdated packages (`axios`, `react`, `react-dom`) to their latest versions.
+   - Address vulnerabilities by updating Lodash version.
+
+7. **Test Analysis:**
+   - Fix flaky tests identified in `auth/login.test.ts`.
+   - Ensure that all components are thoroughly tested and automated CI is implemented for continuous integration.
+
+   - Update outdated packages (`axios`, `react`, `react-dom`) to their latest versions.
+   - Address vulnerabilities by updating Lodash version.
+
+7. **Test Analysis:**
+   - Fix flaky tests identified in `auth/login.test.ts`.
+   - Ensure that all components are thoroughly tested and automated CI is implemented for continuous integration.
+   - Update outdated packages (`axios`, `react`, `react-dom`) to their latest versions.
+   - Address vulnerabilities by updating Lodash version.
+
+7. **Test Analysis:**
+   - Fix flaky tests identified in `auth/login.test.ts`.
+   - Update outdated packages (`axios`, `react`, `react-dom`) to their latest versions.
+   - Update outdated packages (`axios`, `react`, `react-dom`) to their latest versions.
+   - Address vulnerabilities by updating Lodash version.
+
+7. **Test Analysis:**
+   - Fix flaky tests identified in `auth/login.test.ts`.
+   - Ensure that all components are thoroughly tested and automated CI is implemented for continuous integration.
+
+7. **Test Analysis:**
+   - Fix flaky tests identified in `auth/login.test.ts`.
+   - Ensure that all components are thoroughly tested and automated CI is implemented for continuous integration.
+
+   - Fix flaky tests identified in `auth/login.test.ts`.
+   - Ensure that all components are thoroughly tested and automated CI is implemented for continuous integration.
+
+   - Ensure that all components are thoroughly tested and automated CI is implemented for continuous integration.
+
+
+### Estimated Effort:
+
+- Updating outdated dependencies: 20 hours
+- Redundant dependency removals: 15 hours
+- Addressing code quality issues: 10 hours
+- Redundant dependency removals: 15 hours
+- Addressing code quality issues: 10 hours
+- Addressing code quality issues: 10 hours
+- Monitoring Git history: 5 hours
+- Fixing flaky tests: 7.5 hours
+
+#### Recommendations for Improving the Codebase:
+
+- **Code Quality:** Focus on refactoring and addressing anti-patterns to improve maintainability.
+- **Dependencies:** Ensure all dependencies are up-to-date, especially those related to security vulnerabilities.
+- **Test Coverage:** Implement continuous integration and fix flaky tests to ensure robust testing practices.
+- **Git History:** Monitor commit frequency and bus factor to prevent future issues.
+- **Static Analysis:** Address complexity hotspots and update outdated packages for better maintainability.
+
+By addressing these recommendations, the codebase can be improved in terms of maintainability, performance, security, and engineering velocity.}```</pre>
+
+## ⚙️ Setup Instructions
+
+### Prerequisites
+
+Make sure you have the following installed on your local machine
+
+- [Node.js 18.x+ or a higher LTS version](https://nodejs.org/en/download)
+- [pnpm 9.x+](https://pnpm.io/installation)
+- [Ollama](https://ollama.com/download)
+- [Github Token](https://github.com/settings/tokens)
+- Docker 20.x+
+- [A Docker hub Account](https://hub.docker.com/)
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/ovie-best/agent-challenge.git
+cd agent-challenge
+```
+
+### 2. Install dependencies
+
+```bash
 pnpm install
-pnpm run dev
 ```
 
-## Assignment
+### 3. Environment Setup
 
-### Challenge Overview
+create a .env file and add the following
 
-Welcome to the Nosana AI Agent Hackathon! Your mission is to build and deploy an AI agent on Nosana.
-While we provide a weather agent as an example, your creativity is the limit. Build agents that:
-
-**Beginner Level:**
-
-- **Simple Calculator**: Perform basic math operations with explanations
-- **Todo List Manager**: Help users track their daily tasks
-
-**Intermediate Level:**
-
-- **News Summarizer**: Fetch and summarize latest news articles
-- **Crypto Price Checker**: Monitor cryptocurrency prices and changes
-- **GitHub Stats Reporter**: Fetch repository statistics and insights
-
-**Advanced Level:**
-
-- **Blockchain Monitor**: Track and alert on blockchain activities
-- **Trading Strategy Bot**: Automate simple trading strategies
-- **Deploy Manager**: Deploy and manage applications on Nosana
-
-Or any other innovative AI agent idea at your skill level!
-
-### Getting Started
-
-1. **Fork the [Nosana Agent Challenge](https://github.com/nosana-ai/agent-challenge)** to your GitHub account
-2. **Clone your fork** locally
-3. **Install dependencies** with `pnpm install`
-4. **Run the development server** with `pnpm run dev`
-5. **Build your agent** using the Mastra framework
-
-### How to build your Agent
-
-Here we will describe the steps needed to build an agent.
-
-#### Folder Structure
-
-Provided in this repo, there is the `Weather Agent`.
-This is a fully working agent that allows a user to chat with an LLM, and fetches real time weather data for the provided location.
-
-There are two main folders we need to pay attention to:
-
-- [src/mastra/agents/weather-agent/](./src/mastra/agents/weather-agent/)
-- [src/mastra/agents/your-agents/](./src/mastra/agents/your-agent/)
-
-In `src/mastra/agents/weather-agent/` you will find a complete example of a working agent. Complete with Agent definition, API calls, interface definition, basically everything needed to get a full fledged working agent up and running.
-In `src/mastra/agents/your-agents/` you will find a bare bones example of the needed components, and imports to get started building your agent, we recommend you rename this folder, and it's files to get started.
-
-Rename these files to represent the purpose of your agent and tools. You can use the [Weather Agent Example](#example:_weather_agent) as a guide until you are done with it, and then you can delete these files before submitting your final submission.
-
-As a bonus, for the ambitious ones, we have also provided the [src/mastra/agents/weather-agent/weather-workflow.ts](./src/mastra/agents/weather-agent/weather-workflow.ts) file as an example. This file contains an example of how you can chain agents and tools to create a workflow, in this case, the user provides their location, and the agent retrieves the weather for the specified location, and suggests an itinerary.
-
-### LLM-Endpoint
-
-Agents depend on an LLM to be able to do their work.
-
-#### Nosana Endpoint
-
-You can use the following endpoint and model for testing, if you wish:
-
-```
+```bash
+API_BASE_URL=http://127.0.0.1:11434/api
 MODEL_NAME_AT_ENDPOINT=qwen2.5:1.5b
-API_BASE_URL= https://dashboard.nosana.com/jobs/GPVMUckqjKR6FwqnxDeDRqbn34BH7gAa5xWnWuNH1drf
+GITHUB_TOKEN=your_github_token_here
 ```
 
-#### Running Your Own LLM with Ollama
+or run the command below
 
-The default configuration uses a local [Ollama](https://ollama.com) LLM.
-For local development or if you prefer to use your own LLM, you can use [Ollama](https://ollama.ai) to serve the lightweight `qwen2.5:1.5b` mode.
+```bash
+cp .env.example .env
+# then edit .env and add your Github Token:
+# GITHUB_TOKEN=your_github_token_here
+```
 
-**Installation & Setup:**
+_In generating your github token make sure to check all the scopes as shown below_
+![github-token-scopes](https://ibb.co/43wm6YX)
 
-1. **[ Install Ollama ](https://ollama.com/download)**:
-
-2. **Start Ollama service**:
+### 4. Start the Ollama service
 
 ```bash
 ollama serve
 ```
 
-3. **Pull and run the `qwen2.5:1.5b` model**:
+### 5. Pull and run the qwen2.5:1.5b model:
 
 ```bash
 ollama pull qwen2.5:1.5b
 ollama run qwen2.5:1.5b
+# Navigate to http://localhost:11434.
+# you should see "Ollama is running"
 ```
 
-4. **Update your `.env` file**
+### 6. Run the development server
 
-There are two predefined environments defined in the `.env` file. One for local development and another, with a larger model, `qwen2.5:32b`, for more complex use cases.
+```bash
+pnpm run dev
+# Navigate to http://localhost:8080
+```
 
-**Why `qwen2.5:1.5b`?**
+## Environment Variables Required
 
-- Lightweight (only ~1GB)
-- Fast inference on CPU
-- Supports tool calling
-- Great for development and testing
+The following environment variables are required. Create a `.env` file based on `.env.example`.
 
-Do note `qwen2.5:1.5b` is not suited for complex tasks.
+- `GITHUB_TOKEN`: Your github APK token Required for fetching repo data via ocktokit.
+- `MODEL_NAME_AT_ENDPOINT`: The name of the Ollama model to use (e.g., `qwen2.5:1.5b`).
+- `API_BASE_URL`: The base URL for the Ollama API (e.g., `http://127.0.0.1:11434/api`).
 
-The Ollama server will run on `http://localhost:11434` by default and is compatible with the OpenAI API format that Mastra expects.
+## Using Docker to locally test the agent
 
-### Testing your Agent
+**_You can also use docker to test the agent locally_**
 
-You can read the [Mastra Documentation: Playground](https://mastra.ai/en/docs/local-dev/mastra-dev) to learn more on how to test your agent locally.
-Before deploying your agent to Nosana, it's crucial to thoroughly test it locally to ensure everything works as expected. Follow these steps to validate your agent:
-
-**Local Testing:**
-
-1. **Start the development server** with `pnpm run dev` and navigate to `http://localhost:8080` in your browser
-2. **Test your agent's conversation flow** by interacting with it through the chat interface
-3. **Verify tool functionality** by triggering scenarios that call your custom tools
-4. **Check error handling** by providing invalid inputs or testing edge cases
-5. **Monitor the console logs** to ensure there are no runtime errors or warnings
-
-**Docker Testing:**
-After building your Docker container, test it locally before pushing to the registry:
+_use the docker build and run commands below_
 
 ```bash
 # Build your container
@@ -162,176 +399,207 @@ docker build -t yourusername/agent-challenge:latest .
 # Run it locally with environment variables
 docker run -p 8080:8080 --env-file .env yourusername/agent-challenge:latest
 
-# Test the containerized agent at http://localhost:8080
-```
+#Then navigate to http://localhost:8080 to Test the containerized agent
 
-Ensure your agent responds correctly and all tools function properly within the containerized environment. This step is critical as the Nosana deployment will use this exact container.
-
-### Submission Requirements
-
-#### 1. Code Development
-
-- Fork this repository and develop your AI agent
-- Your agent must include at least one custom tool (function)
-- Code must be well-documented and include clear setup instructions
-- Include environment variable examples in a `.env.example` file
-
-#### 2. Docker Container
-
-- Create a `Dockerfile` for your agent
-- Build and push your container to Docker Hub or GitHub Container Registry
-- Container must be publicly accessible
-- Include the container URL in your submission
-
-##### Build, Run, Publish
-
-Note: You'll need an account on [Dockerhub](https://hub.docker.com/)
-
-```sh
-
-# Build and tag
-docker build -t yourusername/agent-challenge:latest .
-
-# Run the container locally
-docker run -p 8080:8080 yourusername/agent-challenge:latest
-
-# Login
-docker login
-
-# Push
 docker push yourusername/agent-challenge:latest
+# this will publish the docker image to dockerhub
 ```
 
-#### 3. Nosana Deployment
+## Example Usage
 
-- Deploy your Docker container on Nosana
-- Your agent must successfully run on the Nosana network
-- Include the Nosana job ID or deployment link
+Once the agent is running, you can interact with it locally through the Mastra playground at http://localhost:8080 (just paste this url on your browser)
 
-##### Nosana Job Definition
+#### **1. Start a conversation with the agent:**
 
-We have included a Nosana job definition at <./nos_job_def/nosana_mastra.json>, that you can use to publish your agent to the Nosana network.
+**User:** _"Hello, what is your function?"_
 
-**A. Deploying using [@nosana/cli](https://github.com/nosana-ci/nosana-cli/)**
+**Agent:** _"My function is to analyze the codebase health of a given repository. I will look at factors such as dependencies, test coverage, commit history, complexity, and identify any security vulnerabilities or outdated packages._
 
-- Edit the file and add in your published docker image to the `image` property. `"image": "docker.io/yourusername/agent-challenge:latest"`
-- Download and install the [@nosana/cli](https://github.com/nosana-ci/nosana-cli/)
-- Load your wallet with some funds
-  - Retrieve your address with: `nosana address`
-  - Go to our [Discord](https://nosana.com/discord) and ask for some NOS and SOL to publish your job.
-- Run: `nosana job post --file nosana_mastra.json --market nvidia-3060 --timeout 30`
-- Go to the [Nosana Dashboard](https://dashboard.nosana.com/deploy) to see your job
+_I'll use various tools like static analysis tool for identifying code smells and patterns, dependency analysis tool to check for outdated or risky packages, git-history mining tool to assess team productivity signals, and the codebase health tool to evaluate overall quality._
 
-**B. Deploying using the [Nosana Dashboard](https://dashboard.nosana.com/deploy)**
+_Just send me a GitHub repository URL to begin."_
 
-- Make sure you have https://phantom.com/, installed for your browser.
-- Go to our [Discord](https://nosana.com/discord) and ask for some NOS and SOL to publish your job.
-- Click the `Expand` button, on the [Nosana Dashboard](https://dashboard.nosana.com/deploy)
-- Copy and Paste your edited Nosana Job Definition file into the Textarea
-- Choose an appropriate GPU for the AI model that you are using
-- Click `Deploy`
+#### **2. Analyze a codebase**
 
-#### 4. Video Demo
+**User:** _Please audit this repo: https://github.com/example/project_
 
-- Record a 1-3 minute video demonstrating:
-  - Your agent running on Nosana
-  - Key features and functionality
-  - Real-world use case demonstration
-- Upload to YouTube, Loom, or similar platform
+**Agent:** _Sure, I will analyze your repository at the link you provided - GitHub Repository URL: https://github.com/example/project. Please hold on while I gather all the necessary information and insights._
 
-#### 5. Documentation
+Please wait a moment for the analysis to complete. Once done, I'll provide an overview of the codebase health score along with key metrics such as dependencies, test coverage, active contributors, frameworks used, etc., followed by recommendations based on my findings.
 
-- Update this README with:
-  - Agent description and purpose
-  - Setup instructions
-  - Environment variables required
-  - Docker build and run commands
-  - Example usage
+### **3. Wait for the full audit**
 
-### Submission Process
+**User:** _ok_
 
-1. **Complete all requirements** listed above
-2. **Commit all of your changes to the `main` branch of your forked repository**
-   - All your code changes
-   - Updated README
-   - Link to your Docker container
-   - Link to your video demo
-   - Nosana deployment proof
-3. **Social Media Post**: Share your submission on X (Twitter)
-   - Tag @nosana_ai
-   - Include a brief description of your agent
-   - Add hashtag #NosanaAgentChallenge
-4. **Finalize your submission on the <https://earn.superteam.fun/agent-challenge> page**
+**Agent:** _I'm ready! Let's dive into the analysis._
 
-- Remember to add your forked GitHub repository link
-- Remember to add a link to your X post.
+**_Codebase Type Detection_**
 
-### Judging Criteria
+_The repository type is detected as a **Backend Web Application** with an identified confidence score of 98%._
 
-Submissions will be evaluated based on:
+**_Analysis:_**
 
-1. **Innovation** (25%)
+**_Dependencies:_**
 
-   - Originality of the agent concept
-   - Creative use of AI capabilities
+_- Total number of dependencies: 150_
 
-2. **Technical Implementation** (25%)
+_- Outdated packages:_
 
-   - Code quality and organization
-   - Proper use of the Mastra framework
-   - Efficient tool implementation
+_- `express`: Version 4.17.2 (last updated on June 3, 2023)_
 
-3. **Nosana Integration** (25%)
+_- `axios`: Version 0.26.0 (last updated on April 28, 2023)_
 
-   - Successful deployment on Nosana
-   - Resource efficiency
-   - Stability and performance
+**_Test Coverage:_**
 
-4. **Real-World Impact** (25%)
-   - Practical use cases
-   - Potential for adoption
-   - Value proposition
+_- Current test coverage: 95%_
 
-### Prizes
+_- Gap in tests:_
+_- Missing unit tests for certain endpoints & Some integration tests are not fully covered_
 
-We’re awarding the **top 10 submissions**:
+**_Active Contributors:_**
 
-- 🥇 1st: $1,000 USDC
-- 🥈 2nd: $750 USDC
-- 🥉 3rd: $450 USDC
-- 🏅 4th: $200 USDC
-- 🔟 5th–10th: $100 USDC
+_Names: `ovie-best`_
 
-All prizes are paid out directly to participants on [SuperTeam](https://superteam.fun)
+_Commits made:_
+_- `ovie-best`: October 3, 2023 (4 commits)_
 
-### Resources
+**_Frameworks Used_**
 
-- [Nosana Documentation](https://docs.nosana.io)
-- [Mastra Documentation](https://mastra.ai/docs)
-- [Mastra Guide: Build an AI stock agent](https://mastra.ai/en/guides/guide/stock-agent)
-- [Nosana CLI](https://github.com/nosana-ci/nosana-cli)
-- [Docker Documentation](https://docs.docker.com)
+_-Backend\*\*: Node.js with Express framework._
 
-### Support
+_-Frontend\*\*: None detected._
 
-- Join [Nosana Discord](https://nosana.com/discord) for technical support where we have dedicated [Builders Challenge Dev chat](https://discord.com/channels/236263424676331521/1354391113028337664) channel.
-- Follow [@nosana_ai](https://x.com/nosana_ai) for updates.
+**_Recommendations_**
 
-### Important Notes
+\*1. **Dependencies\***
+_- Update outdated dependencies (`express` and `axios`) to ensure compatibility and security._
 
-- Ensure your agent doesn't expose sensitive data
-- Test thoroughly before submission
-- Keep your Docker images lightweight
-- Document all dependencies clearly
-- Make your code reproducible
-- You can vibe code it if you want 😉
-- **Only one submission per participant**
-- **Submissions that do not compile, and do not meet the specified requirements, will not be considered**
-- **Deadline is: 9 July 2025, 12.01 PM**
-- **Announcement will be announced about one week later, stay tuned for our socials for exact date**
-- **Finalize your submission at [SuperTeam](https://earn.superteam.fun/agent-challenge)**
+\*2. **Test Coverage\***
+_- Focus on improving the coverage of integration tests, especially for endpoints that have been recently added or modified._
 
-### Don’t Miss Nosana Builder Challenge Updates
+\*3. **Code Quality\***
+_- Review and refactor code patterns identified during static analysis (e.g., excessive use of ternary operators, unnecessary complexity)._
 
-Good luck, builders! We can't wait to see the innovative AI agents you create for the Nosana ecosystem.
-**Happy Building!**
+\*4. **Git History\***
+_- Continue to monitor commit activity and address any new issues as they arise._
+
+\*5. **Static Analysis\***
+_- Conduct a deeper static analysis focusing on complex patterns that could indicate performance bottlenecks or security risks._
+
+\*6. **Dependency Analysis\***
+_- Perform a thorough audit of all dependencies, especially those with high vulnerabilities (e.g., `express`, `axios`)._
+
+\*7. **Test Coverage Analysis\***
+_- Implement additional unit tests to cover new endpoints and improve overall coverage._
+
+**_Prioritized Recommendations:_**
+
+_1. **Dependencies**:_
+_- Update `express` and `axios`._
+
+_2. **Test Coverage**:_
+_- Add missing integration tests for newly added or modified endpoints._
+
+_3. **Code Quality**:_
+_- Refactor complex patterns identified in static analysis._
+
+_4. **Git History**:_
+_- Address new issues as they arise._
+
+_5. **Static Analysis**:_
+_- Conduct a detailed static analysis focusing on complex patterns and security risks._
+
+_6. **Dependency Analysis**:_
+_- Audit all dependencies, especially those with high vulnerabilities._
+
+_7. **Test Coverage Analysis**:_
+_- Implement additional unit tests to cover new endpoints._
+
+**_Estimated Effort:_**
+
+_- Updating `express` and `axios`: 1 day_
+
+_- Adding missing integration tests: 2 days_
+
+_- Refactoring complex patterns: 3 days_
+
+_- Conducting a detailed static analysis: 4 days_
+
+_- Auditing all dependencies: 5 days_
+
+_Total estimated effort: **15 days**._
+
+_Please note that the actual effort required may vary depending on individual priorities and team availability._
+
+### 4. Get critical Issues
+
+**User:** _What are the most critical problems you found?_
+
+**Agent:** _Here are the top 3 critical findings:_
+_1. 🚨 CVE-2023-XXXX in `lodash@4.17.15` (package.json)_
+
+_2. 🔥 High cyclomatic complexity in `auth/validateInput()` (score: 14)_
+
+_3. 🧪 Test coverage in `services/payment.ts` is only 42%_
+
+### 5. Request for a prioritized action plan
+
+**User:** _Can you give me a prioritized list of what to fix?_
+
+**Agent**: _Absolutely. Here's the recommended action plan:_
+
+**_P0 (Critical):_**
+
+_- Upgrade `lodash` to patch known CVE (package.json)_
+
+_- Fix failing CI workflows (see `.github/workflows/build.yml`)_
+
+**_P1 (High Priority):_**
+_- Refactor `validateInput()` to reduce complexity_
+_- Add tests for `payment.ts` to raise coverage to 80%_
+
+**_P2 (Optimization):_**
+_- Remove unused dependencies (`moment`, `request`)_
+_- Update outdated README file_
+
+### 6. Ask for specific detail
+
+**User:** _Where is the validateInput function located?_
+
+**Agent:** _You'll find `validateInput()` in `src/auth/validate.ts` at line 52. It has a complexity score of 14, which exceeds the maintainability threshold (target <10)._
+
+### 7. End the Conversation
+
+**User:** _alright, thanks_
+
+**Agent:** _You're welcome! If you have any further questions or need additional assistance, feel free to ask._
+
+## Technology Stack used
+
+**✓ Framework:** Mastra - TypeScript AI framework
+
+**✓ LLM:** Ollama qwen2.5:1.5b model
+
+**✓ Language:** TypeScript with full type safety
+
+**✓ API:** Ocktokit Github API
+
+**✓ Validation:** Zod schemas for all data structures
+
+**✓ Containerization:** Docker with multi-stage builds
+
+**✓ Deployment:** Nosana decentralized compute network
+
+## Important Links
+
+- **Video Demo**: [Link to Video Demo]
+- **Twitter/X Post**: [Link to Twitter/X Post]
+- **Nosana Job ID**: [Link to Host Address]
+- **Nosana Deployment Link**: [Link to Host Address]
+
+#### **Deployment Details:**
+
+- **Job ID**: ``
+- **Host**: []()
+- **Deployer**: []()
+- **Docker Image**: []()
