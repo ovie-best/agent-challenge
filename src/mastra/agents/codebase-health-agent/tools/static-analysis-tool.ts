@@ -119,7 +119,7 @@ export const staticAnalysisTool = createTool({
                   },
                 });
 
-                // Handle file content (now as raw text)
+                // Handle file content as raw text
                 const content = fileResponse.data as unknown as string;
                 const lines = content.split("\n");
                 const foundPatterns: string[] = [];

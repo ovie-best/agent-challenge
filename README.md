@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-### 🔍 Agent Description and Purpose
+## 🔍 Agent Description and Purpose
 
 The Codebase Audit Agent is an intelligent, automated system designed to analyze remote software repositories on github and generate actionable technical reports on code quality, maintainability, security posture, and team productivity signals.
 
@@ -12,31 +12,31 @@ Built with a deep understanding of large-scale systems, secure coding practices,
 
 The agent simulates the judgment and rigor of a Senior Software Engineer or Engineering Auditor with 10+ years of experience. It delivers:
 
-✓ Codebase Health Reports (with numerical scoring on a 100% scale)
+✓ Codebase Health Reports - (with numerical scoring on a 100% scale)
 
-✓ Technology Stack Identification (with confidence metrics)
+✓ Technology Stack Identification - (with confidence metrics)
 
-✓ Security & Dependency Audits (including CVEs and outdated packages)
+✓ Security & Dependency Audits - (including CVEs and outdated packages)
 
-✓ Static Code Analysis (complexity, anti-patterns, documentation)
+✓ Static Code Analysis - (complexity, anti-patterns, documentation)
 
-✓ Team Productivity Signals (via git history)
+✓ Team Productivity Signals - (via git history)
 
-✓ CI/CD (continous integration and continous deployment) and Test Coverage Diagnostics
+✓ CI/CD (continous integration and continous deployment) - and Test Coverage Diagnostics
 
-✓ Prioritized Recommendations (P0–P2 triage system)
+✓ Prioritized Recommendations - (P0–P2 triage system)
 
 It ensures consistency, reproducibility, and evidence-based insights—useful to developers, team leads, and engineering managers.
 
-### 🛠️ Agent Tools & Capabilities Breakdown
+## 🛠️ Agent Tools & Capabilities Breakdown
 
 The agent is built with six(6) tools, each tool in the agent's workflow is specialized for a specific stage of analysis:
 
-#### 1. codebaseHealthTool
+### 1. codebaseHealthTool
 
 ✓ This tool assigns a Health Score (0–100%) based on general metrics (structure, dependencies, tests).
 
-#### 2. codebaseTypeDetector
+### 2. codebaseTypeDetector
 
 ✓ Identifies project type (Frontend, Backend, Mobile, AI, Monorepo).
 
@@ -44,7 +44,7 @@ The agent is built with six(6) tools, each tool in the agent's workflow is speci
 
 ✓ Flags deprecated or mixed-stack warnings.
 
-#### 3. gitHistoryTool
+### 3. gitHistoryTool
 
 ✓ Analyzes commit activity over time.
 
@@ -52,7 +52,7 @@ The agent is built with six(6) tools, each tool in the agent's workflow is speci
 
 ✓ Detects dead code, orphaned branches, and spikes/inactivity.
 
-#### 4. staticAnalysisTool
+### 4. staticAnalysisTool
 
 ✓ Calculates cyclomatic complexity and flags unmaintainable functions.
 
@@ -60,13 +60,13 @@ The agent is built with six(6) tools, each tool in the agent's workflow is speci
 
 ✓ Assesses documentation coverage (missing docstrings, outdated README).
 
-#### 5. dependencyAnalysisTool
+### 5. dependencyAnalysisTool
 
 ✓ Checks for outdated packages and vulnerabilities (CVEs).
 
 ✓ Highlights redundant or unused dependencies to reduce bloat.
 
-#### 6. testCoverageTool
+### 6. testCoverageTool
 
 ✓ Reports test coverage levels and gaps.
 
@@ -74,19 +74,19 @@ The agent is built with six(6) tools, each tool in the agent's workflow is speci
 
 ✓ Measures CI (continous integration) latency, failure rates, and reliability of build pipelines.
 
-### ⚙️ Agent Workflow
+## ⚙️ Agent Workflow
 
 The workflow for the agent is designed to automatically review a software project hosted on GitHub and produce a detailed health report. It mimics what a senior software engineer or auditor would do manually — but faster, and at scale.
 
-![codebase audit agent workflow image]()
+![codebase audit agent workflow image](./assets/codebase-audit-workflow.png)
 
-#### Below is a step by step process on how it works:
+### Below is a step by step process on how it works:
 
-#### 1. Start with the Repo URL
+### 1. Start with the Repo URL
 
 You give it a GitHub repo link (e.g., https://github.com/myorg/myrepo).
 
-#### 2. Initial Health Check
+### 2. Initial Health Check
 
 It runs a quick, high-level check to score the project’s overall health out of 100.
 It looks at things like:
@@ -101,7 +101,7 @@ It looks at things like:
 
 This step helps decide how deep the audit needs to go.
 
-#### 3. In-Depth Analysis (Runs in Parallel)
+### 3. In-Depth Analysis (Runs in Parallel)
 
 If the repo isn't already in great shape, it performs a series of specialized analyses:
 
@@ -117,7 +117,7 @@ If the repo isn't already in great shape, it performs a series of specialized an
 
 **✓ General Repo Data:** Collects stats like last commit date, open issues, test coverage, and whether it has a README or license.
 
-#### 4. Generate a Human-Readable Report (Final Step)
+### 4. Generate a Human-Readable Report (Final Step)
 
 All the results are sent to the agent (trained to think like a senior software engineer), which:
 
@@ -133,7 +133,7 @@ Gives a list of recommendations, each marked as:
 
 Estimates the effort needed to fix each issue.
 
-Below is an example of the a generated report 👇
+Below is an example of the generated report 👇
 
 <pre>```json{
   ### Codebase Audit Report
@@ -354,7 +354,7 @@ cp .env.example .env
 ```
 
 _In generating your github token make sure to check all the scopes as shown below_
-![github-token-scopes](https://ibb.co/43wm6YX)
+![github-token-scopes](./assets/git-hub%20token.png)
 
 ### 4. Start the Ollama service
 
@@ -409,7 +409,7 @@ docker push yourusername/agent-challenge:latest
 
 Once the agent is running, you can interact with it locally through the Mastra playground at http://localhost:8080 (just paste this url on your browser)
 
-#### **1. Start a conversation with the agent:**
+### **1. Start a conversation with the agent:**
 
 **User:** _"Hello, what is your function?"_
 
@@ -419,7 +419,7 @@ _I'll use various tools like static analysis tool for identifying code smells an
 
 _Just send me a GitHub repository URL to begin."_
 
-#### **2. Analyze a codebase**
+### **2. Analyze a codebase**
 
 **User:** _Please audit this repo: https://github.com/example/project_
 

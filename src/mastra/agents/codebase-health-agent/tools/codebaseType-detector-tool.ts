@@ -2,7 +2,6 @@ import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 import { Octokit } from "octokit";
 
-// Extended Framework signatures with more categories and frameworks
 const FRAMEWORK_SIGNATURES = {
   // Frontend
   frontend: {
@@ -282,7 +281,7 @@ async function analyzeDependencies(
     warnings: [],
   };
 
-  // Enhanced package manager detection with more options
+  // package manager detection
   const lockFiles = {
     "package-lock.json": "npm",
     "yarn.lock": "yarn",
@@ -592,7 +591,7 @@ function detectCodebaseType(
     }
   }
 
-  // Enhanced confidence calculation
+  // confidence calculation
   const totalPossibleIdentifiers = Object.values(FRAMEWORK_SIGNATURES)
     .flatMap(Object.values)
     .flat().length;
