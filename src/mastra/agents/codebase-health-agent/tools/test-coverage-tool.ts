@@ -43,7 +43,7 @@ export const testCoverageTool = createTool({
     );
     if (reports.length === 0) return noReportsFound();
 
-    // Calculate metrics
+    // Calculation of metrics
     const coverage = calculateAverageCoverage(reports);
     return {
       coverage,
@@ -159,7 +159,7 @@ async function parseReport(
   );
 }
 
-// Parsers (simplified implementations)
+// Parsers
 function parseLcov(content: string): CoverageData {
   const lines = content.split("\n");
   const totals = lines.filter(

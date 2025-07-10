@@ -592,14 +592,17 @@ _- Update outdated README file_
 
 ## Important Links
 
-- **Video Demo**: [Link to Video Demo]
-- **Twitter/X Post**: [Link to Twitter/X Post]
-- **Nosana Job ID**: [Link to Host Address]
-- **Nosana Deployment Link**: [Link to Host Address]
+- **Video Demo**: https://youtu.be/ENFSkzSYgiE
+- **Twitter Post**: https://x.com/oviebest_2/status/1943109456889360816
+- **Nosana Job ID**: [FF2fEriUSeqsMfKs6QFdnomLorrFUQnfsshWN7zXYF9e](https://dashboard.nosana.com/host/FF2fEriUSeqsMfKs6QFdnomLorrFUQnfsshWN7zXYF9e)
+- **Nosana Deployment Link**: https://55tn4oumzcxpz6sj7jhxnuycjt9glchdtsd9mcvbdgyc.node.k8s.prd.nos.ci/
+- **Deployer**: [Akevd4tT67f5Zzz7UwYYciiNLytJD4dQPomBfcpy5exC](https://dashboard.nosana.com/deployer/Akevd4tT67f5Zzz7UwYYciiNLytJD4dQPomBfcpy5exC)
+- **Docker Image**: [oviedev12/agent-challenge](https://hub.docker.com/r/oviedev12/agent-challenge)
+- **Source Code**: https://github.com/ovie-best/agent-challenge
 
-#### **Deployment Details:**
+# Important Note:
 
-- **Job ID**: ``
-- **Host**: []()
-- **Deployer**: []()
-- **Docker Image**: []()
+_This codebase audit agent may give you results with some sections in a json format._
+_It is recommeded when it does this, you can rquest for it to give you the report in a text based format which is easily readable._
+
+_*Cheers and happy code auditing !!!*_
